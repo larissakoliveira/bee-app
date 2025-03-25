@@ -18,6 +18,9 @@ const Flag: React.FC<FlagProps> = ({ src, alt, title, onClick }) => {
       className="h-8 w-8 object-contain cursor-pointer"
       title={title}
       onClick={onClick}
+      tabIndex={0}
+      role="button"
+      aria-label="Switch language to Dutch"
     />
   );
 };
