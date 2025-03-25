@@ -5,6 +5,9 @@ interface FlagProps {
   alt: string;
   title: string;
   onClick: () => void;
+  tabIndex?: number;
+  role?: string;
+  "aria-label"?: string;
 }
 
 const Flag: React.FC<FlagProps> = ({ src, alt, title, onClick }) => {

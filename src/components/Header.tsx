@@ -54,6 +54,9 @@ const Header: React.FC<HeaderProps> = ({ logoSrc, companyName }) => {
           alt="Dutch" 
           title="Dutch" 
           onClick={() => handleChangeLanguage('nl')} 
+          tabIndex={0}
+          role="button"
+          aria-label="Switch language to Dutch"
         />
         <Flag 
           src="/uk_flag.png" 
