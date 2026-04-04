@@ -6,6 +6,7 @@
   "outOfStock": "Niet Op Voorraad",
   "emailPlaceholder": "Voer uw e-mail in",
   "notifyMe": "Laat het mij weten",
+  "notifyMeModalTitle": "Laat het mij weten over {{productName}}",
   "moreInfo": "Meer informatie",
   "notifyMessage": "Maak je geen zorgen! Ik heb genoteerd dat je wilt worden geïnformeerd op {{email}} wanneer {{productName}} weer op voorraad is.",
   "notifyTitle": "Gefeliciteerd! Je wordt geïnformeerd!",

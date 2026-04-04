@@ -1,26 +1,53 @@
 import client from './graphqlClient';
-import { PRODUCTS_QUERY } from './queries';
-import { Product, GraphQLResponse } from './types';
+import { buildProductsQuery, getProductCollectionFieldName } from './queries';
+import { Product, ProductCollection, ProductItem } from './types';
+
+const productContentTypeId =
+  import.meta.env.VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID?.trim() || 'product';
+
+/** Must match Content model → Email registration → API identifier (same as webhook `CONTENTFUL_EMAIL_REGISTRATION_CONTENT_TYPE_ID`). */
+const emailRegistrationContentTypeId =
+  import.meta.env.VITE_CONTENTFUL_EMAIL_REGISTRATION_CONTENT_TYPE_ID?.trim() || 'emailRegistration';
+
+if (import.meta.env.DEV && !import.meta.env.VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID?.trim()) {
+  console.warn(
+    '[Contentful] VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID is not set; using "product". ' +
+      'If you see "Cannot query field productCollection", set it to your Product content type API identifier (Content model → Product).'
+  );
+}
 
 export const fetchProducts = async (): Promise<Product[]> => {
   try {
-    const data = await client.request<GraphQLResponse>(PRODUCTS_QUERY);
+    const collectionField = getProductCollectionFieldName(productContentTypeId);
+    const query = buildProductsQuery(collectionField);
+    const data = await client.request<Record<string, ProductCollection>>(query);
+    const collection = data[collectionField];
+    if (!collection?.items) {
+      console.error('Unexpected GraphQL response shape for', collectionField);
+      return [];
+    }
 
-    return data.productCollection.items.map((item) => ({
-      id: item.sys.id,
-      productNameEnglish: item.productNameEnglish,
-      productNameDutch: item.productNameDutch,
-      productNamePortuguese: item.productNamePortuguese,
-      productNameGerman: item.productNameGerman,
-      descriptionEnglish: item.descriptionEnglish,
-      descriptionDutch: item.descriptionDutch,
-      descriptionPortuguese: item.descriptionPortuguese,
-      descriptionGerman: item.descriptionGerman,
-      image: {
-        url: item.image.url,
-      },
-      isInStock: item.inStock,
-    }));
+    return collection.items.map((item: ProductItem) => {
+      const nameEn = item.productNameEnglish ?? '';
+      const nameNl = item.productNameDutch ?? '';
+      const descEn = item.descriptionEnglish ?? '';
+      const descNl = item.descriptionDutch ?? '';
+      return {
+        id: item.sys.id,
+        productNameEnglish: nameEn,
+        productNameDutch: nameNl,
+        productNamePortuguese: nameEn,
+        productNameGerman: nameEn,
+        descriptionEnglish: descEn,
+        descriptionDutch: descNl,
+        descriptionPortuguese: descEn,
+        descriptionGerman: descEn,
+        image: {
+          url: item.image.url,
+        },
+        isInStock: item.inStock,
+      };
+    });
   } catch (error) {
     console.error('Error fetching products:', error);
     return [];
@@ -39,7 +66,7 @@ export const registerEmailContentful = async (email: string, productId: string, 
       headers: {
         'Authorization': `Bearer ${accessTokenPost}`,
         'Content-Type': 'application/vnd.contentful.management.v1+json',
-        'X-Contentful-Content-Type': 'emailRegistration',
+        'X-Contentful-Content-Type': emailRegistrationContentTypeId,
       },
       body: JSON.stringify({
         fields: {

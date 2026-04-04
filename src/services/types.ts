@@ -8,29 +8,22 @@ export interface ProductImage {
     json: unknown;
   }
   
+  /** GraphQL item: NL+EN from CMS; PT/DE are filled in the service layer from English. */
   export interface ProductItem {
     sys: {
       id: string;
     };
     productNameDutch: string;
     productNameEnglish: string;
-    productNamePortuguese: string;
-    productNameGerman: string;
-    descriptionDutch: string;
-    descriptionEnglish: string;
-    descriptionPortuguese: string;
-    descriptionGerman: string;
     inStock: boolean;
     image: ProductImage;
     description: ProductDescription;
+    descriptionDutch: string;
+    descriptionEnglish: string;
   }
   
   export interface ProductCollection {
     items: ProductItem[];
-  }
-  
-  export interface GraphQLResponse {
-    productCollection: ProductCollection;
   }
   
   export interface Product {

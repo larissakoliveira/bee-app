@@ -6,6 +6,7 @@
   "outOfStock": "Out of Stock",
   "emailPlaceholder": "Enter your email",
   "notifyMe": "Notify me",
+  "notifyMeModalTitle": "Notify me about {{productName}}",
   "moreInfo": "More information",
   "notifyMessage": "Don't worry! I've noted that you want to be notified at {{email}} when {{productName}} is back in stock.",
   "notifyTitle": "Congrats! You will be notified!",

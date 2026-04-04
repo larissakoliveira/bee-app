@@ -6,6 +6,7 @@
   "outOfStock": "Nicht auf Lager",
   "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
   "notifyMe": "Benachrichtigen Sie mich",
+  "notifyMeModalTitle": "Benachrichtigen Sie mich über {{productName}}",
   "moreInfo": "Mehr Informationen",
   "notifyMessage": "Keine Sorge! Ich habe notiert, dass Sie an {{email}} benachrichtigt werden möchten, wenn {{productName}} wieder auf Lager ist.",
   "notifyTitle": "Herzlichen Glückwunsch! Sie werden benachrichtigt!",

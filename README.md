@@ -44,6 +44,9 @@ This web application showcases various honey-based products such as honey jars, 
 | `VITE_CONTENTFUL_SPACE_ID`                       | Your Contentful space ID                    |
 | `VITE_CONTENTFUL_ACCESS_TOKEN_DELIVERY_API`      | Your Contentful delivery API token (HTTP GET) API KEYS|
 | `VITE_CONTENTFUL_ACCESS_TOKEN_MANAGEMENT`        | Your Contentful management API token (HTTP POST, DELETE, PATCH, PUT) CMA TOKENS|
+| `VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID` (optional) | Product content type **API identifier**; GraphQL uses `<id>Collection`. Defaults to `product`. |
+
+Product text in Contentful must include **Dutch and English** names and descriptions. Portuguese and German in the app (and in stock emails) **fall back to English** when not provided in the webhook payload.
 
    ```bash
    git clone git@github.com:devFullMates/bee-app.git

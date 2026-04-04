@@ -57,7 +57,7 @@ const CardComponent: React.FC<CardProps> = ({
   });
 
   return (
-    <article className="mt-4 w-full max-w-xs bg-white p-5 rounded-xl shadow-lg border border-neutral-200 flex flex-col justify-between min-h-[465px]">
+    <article className="mt-4 w-full max-w-xs bg-white/70 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-white/10 flex flex-col justify-between min-h-[465px]">
       <h2 className="text-lg font-bold text-neutral-900 text-center mb-2 line-clamp-2">{translatedName}</h2>
       <div className="relative w-full aspect-[4/3] mb-4 rounded-lg overflow-hidden bg-custom-brown/5">
         <ProductImage
@@ -78,9 +78,8 @@ const CardComponent: React.FC<CardProps> = ({
         </button>
       </p>
       <div
-        className={`flex items-center justify-center font-bold min-h-[5.5rem] ${
-          isInStock ? 'text-green-900 text-xl mb-2' : 'text-red-900'
-        }`}
+        className={`flex items-center justify-center font-bold min-h-[5.5rem] ${isInStock ? 'text-green-900 text-xl mb-2' : 'text-red-900'
+          }`}
       >
         {isInStock ? (
           <div className="flex items-center gap-2">
@@ -115,14 +114,13 @@ const CardComponent: React.FC<CardProps> = ({
         <div className="text-gray-700 text-sm leading-relaxed">{translatedDescription}</div>
       </Modal>
 
-      <Modal isOpen={showNotifyModal} onClose={handleToggleNotifyModal} title={t('notifyMe')}>
+      <Modal isOpen={showNotifyModal} onClose={handleToggleNotifyModal} title={t('notifyMeModalTitle', { productName: translatedName })}>
         <input
           type="email"
           autoComplete="email"
           placeholder={t('emailPlaceholder')}
-          className={`border p-2 rounded-md w-full mb-0.5 ${
-            email === '' || isEmail(email) ? 'border-green-500' : 'border-red-500'
-          }`}
+          className={`border p-2 rounded-md w-full mb-0.5 ${email === '' || isEmail(email) ? 'border-green-500' : 'border-red-500'
+            }`}
           value={email}
           onChange={handleEmailChange}
         />
@@ -146,11 +144,10 @@ const CardComponent: React.FC<CardProps> = ({
           type="button"
           onClick={handleNotifyClick}
           disabled={email !== '' && !isEmail(email)}
-          className={`text-white p-2 mt-2 rounded-md transition w-full ${
-            email !== '' && !isEmail(email)
-              ? 'bg-gray-400 cursor-not-allowed'
-              : 'bg-custom-brown hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-custom-brown'
-          }`}
+          className={`text-white p-2 mt-2 rounded-md transition w-full ${email !== '' && !isEmail(email)
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-custom-brown hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-custom-brown'
+            }`}
         >
           {t('notifyMe')}
         </button>

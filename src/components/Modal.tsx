@@ -1,4 +1,5 @@
 import React, { useEffect, useId } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   isOpen: boolean;
@@ -41,7 +42,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
     event.stopPropagation();
   };
 
-  return (
+  /** Portal to document.body so `position: fixed` covers the viewport. Ancestors with
+   * `backdrop-filter` / `transform` (e.g. product cards) otherwise trap fixed overlays. */
+  return createPortal(
     <div
       className="fixed inset-0 flex items-center justify-center bg-gray-900/60 backdrop-blur-[2px] z-50 p-4"
       onClick={onClose}
@@ -68,7 +71,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
