@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -10,10 +11,16 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Solid fallback so paint happens before background.webp decodes */
 body {
-  background: url('/background.webp') no-repeat center center fixed;
+  background-color: #3d1409;
+  background-image: url('/background.webp');
+  background-repeat: no-repeat;
+  background-position: center center;
   background-size: cover;
-  cursor: url('/bee.png') 16 16, auto;
+  /* scroll is cheaper than fixed (fewer compositor layers / scroll-linked effects) */
+  background-attachment: scroll;
+  cursor: auto;
 }
 
 ::-webkit-scrollbar {
@@ -21,38 +28,41 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #D98C38;
+  background: #d98c38;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #5A1E0D;
+  background: #5a1e0d;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4A160A;
+  background: #4a160a;
 }
 
+/* Promote animated logo to its own layer for compositing */
 .bee-animation {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
   animation: fly 5s infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bee-animation {
+    animation: none;
+  }
 }
 
 @keyframes fly {
   0% {
-    transform: translate(0, 0);
+    transform: translateZ(0) translate(0, 0);
   }
   50% {
-    transform: translate(100px, -40px) rotate(-40deg);
+    transform: translateZ(0) translate(100px, -40px) rotate(-40deg);
   }
   100% {
-    transform: translate(0, 0);
+    transform: translateZ(0) translate(0, 0);
   }
-}
-
-.delay-200 {
-  animation-delay: 0.2s;
-}
-
-.delay-400 {
-  animation-delay: 0.4s;
 }

@@ -5,7 +5,7 @@ export interface ProductImage {
   }
   
   export interface ProductDescription {
-    json: any;
+    json: unknown;
   }
   
   export interface ProductItem {

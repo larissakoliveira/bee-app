@@ -18,8 +18,6 @@ export const fetchProducts = async (): Promise<Product[]> => {
       descriptionGerman: item.descriptionGerman,
       image: {
         url: item.image.url,
-        title: item.image.title,
-        description: item.image.description,
       },
       isInStock: item.inStock,
     }));

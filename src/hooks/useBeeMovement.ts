@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { throttle } from 'lodash';
 import { MAX_BEES, BEE_THROTTLE_MS } from '../constants/config';
 
 interface BeePosition {
@@ -7,40 +6,21 @@ interface BeePosition {
   y: number;
 }
 
-export const useBeeMovement = () => {
+/** Mouse trail in viewport coordinates (matches `position: fixed`). */
+export function useBeeMovement() {
   const [bees, setBees] = useState<BeePosition[]>([]);
   const beesRef = useRef<BeePosition[]>([]);
-  const [beeImage, setBeeImage] = useState<HTMLImageElement | null>(null);
+  const lastFireRef = useRef(0);
 
   useEffect(() => {
-    const img = new Image();
-    img.src = '/bee.png';
-    img.onload = () => setBeeImage(img);
-
-    let lastKnownMouseX = 0;
-    let lastKnownMouseY = 0;
-
-    const handleMouseMove = (event: MouseEvent) => {
-      lastKnownMouseX = event.clientX;
-      lastKnownMouseY = event.clientY;
-      updateBeePosition(lastKnownMouseX, lastKnownMouseY);
-    };
-
-    const handleScroll = () => {
-      const scrollX = window.scrollX || window.pageXOffset;
-      const scrollY = window.scrollY || window.pageYOffset;
-      updateBeePosition(lastKnownMouseX + scrollX, lastKnownMouseY + scrollY);
-    };
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      return;
+    }
 
     const updateBeePosition = (clientX: number, clientY: number) => {
-      const scrollX = window.scrollX || window.pageXOffset;
-      const scrollY = window.scrollY || window.pageYOffset;
-      
-      const newBee = {
-        x: clientX + scrollX,
-        y: clientY + scrollY
-      };
-      
+      const newBee = { x: clientX, y: clientY };
+
       beesRef.current = [...beesRef.current, newBee];
       if (beesRef.current.length > MAX_BEES) {
         beesRef.current.shift();
@@ -48,17 +28,21 @@ export const useBeeMovement = () => {
       setBees([...beesRef.current]);
     };
 
-    const throttledMouseMove = throttle(handleMouseMove, BEE_THROTTLE_MS);
-    const throttledScroll = throttle(handleScroll, BEE_THROTTLE_MS);
+    const handleMouseMove = (event: MouseEvent) => {
+      const now = performance.now();
+      if (now - lastFireRef.current < BEE_THROTTLE_MS) {
+        return;
+      }
+      lastFireRef.current = now;
+      updateBeePosition(event.clientX, event.clientY);
+    };
 
-    window.addEventListener('mousemove', throttledMouseMove);
-    window.addEventListener('scroll', throttledScroll);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     return () => {
-      window.removeEventListener('mousemove', throttledMouseMove);
-      window.removeEventListener('scroll', throttledScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
-  return { bees, beeImage };
-};
+  return bees;
+}

@@ -6,7 +6,6 @@
   "outOfStock": "Fora de Estoque",
   "emailPlaceholder": "Digite seu email",
   "notifyMe": "Notifique-me",
-  "invalidEmail": "Por favor, insira um endereço de email válido.",
   "moreInfo": "Mais informações",
   "notifyMessage": "Não se preocupe! Anotei que você deseja ser notificado em {{email}} quando {{productName}} estiver de volta em estoque.",
   "notifyTitle": "Parabéns! Você será notificado!",

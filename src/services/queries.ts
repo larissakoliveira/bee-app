@@ -18,8 +18,6 @@ export const PRODUCTS_QUERY = gql`
         inStock
         image {
           url
-          title
-          description
         }
       }
     }
