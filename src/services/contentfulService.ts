@@ -68,7 +68,8 @@ export const registerEmailContentful = async (email: string, productId: string, 
     throw new Error('Missing VITE_CONTENTFUL_SPACE_ID or VITE_CONTENTFUL_ACCESS_TOKEN_MANAGEMENT in .env');
   }
 
-  const registerEmailContentfulUrl = `https://api.contentful.com/spaces/${spaceId}/environments/master/entries`;
+  const envId = import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID?.trim() || 'master';
+  const registerEmailContentfulUrl = `https://api.contentful.com/spaces/${spaceId}/environments/${encodeURIComponent(envId)}/entries`;
 
   const locale = 'en-US';
   const fields: Record<string, Record<string, unknown>> = {

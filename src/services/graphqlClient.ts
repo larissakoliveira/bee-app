@@ -9,6 +9,8 @@ if (!spaceId || !accessTokenGet) {
 
 const endpoint = `https://graphql.contentful.com/content/v1/spaces/${spaceId}`;
 
+const environmentId = import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID?.trim() || 'master';
+
 /** Prioritize the GraphQL request so product data (and thus LCP image URL) resolves sooner on supported browsers. */
 function fetchWithHighPriority(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   return fetch(input, {
@@ -20,6 +22,7 @@ function fetchWithHighPriority(input: RequestInfo | URL, init?: RequestInit): Pr
 const client = new GraphQLClient(endpoint, {
   headers: {
     Authorization: `Bearer ${accessTokenGet}`,
+    'X-Contentful-Environment': environmentId,
   },
   fetch: fetchWithHighPriority,
 });
