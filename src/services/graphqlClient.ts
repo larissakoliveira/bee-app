@@ -7,9 +7,11 @@ if (!spaceId || !accessTokenGet) {
   throw new Error('Missing Contentful space ID or access token');
 }
 
-const endpoint = `https://graphql.contentful.com/content/v1/spaces/${spaceId}`;
-
 const environmentId = import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID?.trim() || 'master';
+
+// Environment must be in the URL path, not the X-Contentful-Environment header: that header is not
+// listed in Contentful's CORS Access-Control-Allow-Headers, so browser requests fail preflight.
+const endpoint = `https://graphql.contentful.com/content/v1/spaces/${spaceId}/environments/${encodeURIComponent(environmentId)}`;
 
 /** Prioritize the GraphQL request so product data (and thus LCP image URL) resolves sooner on supported browsers. */
 function fetchWithHighPriority(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
@@ -22,7 +24,6 @@ function fetchWithHighPriority(input: RequestInfo | URL, init?: RequestInit): Pr
 const client = new GraphQLClient(endpoint, {
   headers: {
     Authorization: `Bearer ${accessTokenGet}`,
-    'X-Contentful-Environment': environmentId,
   },
   fetch: fetchWithHighPriority,
 });
