@@ -68,11 +68,42 @@ export const fetchProducts = async (): Promise<Product[]> => {
 };
 
 export const registerEmailContentful = async (email: string, productId: string, language: string): Promise<void> => {
+  const registerApiUrl = import.meta.env.VITE_EMAIL_REGISTER_API_URL?.trim();
+
+  if (registerApiUrl) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    const shared = import.meta.env.VITE_EMAIL_REGISTER_SHARED_SECRET?.trim();
+    if (shared) {
+      headers['X-Bee-Register-Secret'] = shared;
+    }
+    const response = await fetch(registerApiUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ email, productId, language }),
+    });
+    const bodyText = await response.text();
+    if (!response.ok) {
+      console.error('[registerEmailContentful] register API rejected', response.status, bodyText);
+      let detail = bodyText.slice(0, 400);
+      try {
+        const parsed = JSON.parse(bodyText) as { detail?: string; message?: string };
+        if (parsed.detail) detail = parsed.detail;
+        else if (parsed.message) detail = parsed.message;
+      } catch {
+        /* use raw */
+      }
+      throw new Error(detail);
+    }
+    return;
+  }
+
   const spaceId = import.meta.env.VITE_CONTENTFUL_SPACE_ID;
   const accessTokenPost = import.meta.env.VITE_CONTENTFUL_ACCESS_TOKEN_MANAGEMENT;
 
   if (!spaceId?.trim() || !accessTokenPost?.trim()) {
-    throw new Error('Missing VITE_CONTENTFUL_SPACE_ID or VITE_CONTENTFUL_ACCESS_TOKEN_MANAGEMENT in .env');
+    throw new Error(
+      'Missing VITE_CONTENTFUL_SPACE_ID or VITE_CONTENTFUL_ACCESS_TOKEN_MANAGEMENT in .env, or set VITE_EMAIL_REGISTER_API_URL to your webhook register endpoint (see .env.example).'
+    );
   }
 
   const envId = import.meta.env.VITE_CONTENTFUL_ENVIRONMENT_ID?.trim() || 'master';

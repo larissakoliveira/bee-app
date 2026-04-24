@@ -13,6 +13,13 @@ interface ImportMetaEnv {
   readonly VITE_CONTENTFUL_EMAIL_REGISTRATION_EMAIL_FIELD_ID?: string;
   readonly VITE_CONTENTFUL_EMAIL_REGISTRATION_LANGUAGE_FIELD_ID?: string;
   readonly VITE_CONTENTFUL_EMAIL_REGISTRATION_RELATED_PRODUCT_FIELD_ID?: string;
+  /**
+   * Optional: POST notify-me signups to this URL (e.g. webhook `…/api/registerEmail` or `…/register-email`)
+   * so the CMA token stays server-side. When unset, the app posts directly to Contentful (needs VITE_CONTENTFUL_ACCESS_TOKEN_MANAGEMENT).
+   */
+  readonly VITE_EMAIL_REGISTER_API_URL?: string;
+  /** Optional: must match webhook `EMAIL_REGISTER_SHARED_SECRET` when that env is set. */
+  readonly VITE_EMAIL_REGISTER_SHARED_SECRET?: string;
   /** Optional: built into index.html at build time for LCP preload (see .env.example). */
   readonly VITE_LCP_IMAGE_PRELOAD_URL?: string;
 }
