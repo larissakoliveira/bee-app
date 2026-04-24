@@ -10,7 +10,7 @@ interface CardProps {
   productImage: string;
   description: string;
   isInStock: boolean;
-  onNotify: (email: string, productId: string) => void;
+  onNotify: (email: string, productId: string) => Promise<void>;
   /** First card can use higher image priority for LCP. */
   imageFetchPriority?: 'high' | 'low' | 'auto';
 }
@@ -28,17 +28,28 @@ const CardComponent: React.FC<CardProps> = ({
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [showNotifyModal, setShowNotifyModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [notifySubmitting, setNotifySubmitting] = useState(false);
+  const [notifySubmitError, setNotifySubmitError] = useState<string | null>(null);
   const { t } = useTranslation();
 
   const handleEmailChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   }, []);
 
-  const handleNotifyClick = () => {
-    if (email !== '' && isEmail(email)) {
-      onNotify(email, productId);
+  const handleNotifyClick = async () => {
+    if (email === '' || !isEmail(email)) return;
+    setNotifySubmitError(null);
+    setNotifySubmitting(true);
+    try {
+      await onNotify(email, productId);
       setShowNotifyModal(false);
       setShowSuccessModal(true);
+      setEmail('');
+    } catch (error) {
+      console.error('Failed to submit notification request', error);
+      setNotifySubmitError(t('notifySubmitError'));
+    } finally {
+      setNotifySubmitting(false);
     }
   };
 
@@ -46,6 +57,7 @@ const CardComponent: React.FC<CardProps> = ({
   const handleToggleNotifyModal = () => {
     setShowNotifyModal((v) => !v);
     setEmail('');
+    setNotifySubmitError(null);
   };
   const handleToggleSuccessModal = () => setShowSuccessModal(false);
 
@@ -140,16 +152,24 @@ const CardComponent: React.FC<CardProps> = ({
             </span>
           </span>
         )}
+        {notifySubmitError && (
+          <p className="text-red-900 text-sm mt-2 font-semibold" role="alert">
+            {notifySubmitError}
+          </p>
+        )}
         <button
           type="button"
-          onClick={handleNotifyClick}
-          disabled={email !== '' && !isEmail(email)}
-          className={`text-white p-2 mt-2 rounded-md transition w-full ${email !== '' && !isEmail(email)
-            ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-custom-brown hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-custom-brown'
-            }`}
+          onClick={() => {
+            void handleNotifyClick();
+          }}
+          disabled={notifySubmitting || (email !== '' && !isEmail(email))}
+          className={`text-white p-2 mt-2 rounded-md transition w-full ${
+            notifySubmitting || (email !== '' && !isEmail(email))
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-custom-brown hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-custom-brown'
+          }`}
         >
-          {t('notifyMe')}
+          {notifySubmitting ? t('notifySubmitting') : t('notifyMe')}
         </button>
       </Modal>
 

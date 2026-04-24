@@ -10,6 +10,8 @@
   "moreInfo": "Meer informatie",
   "notifyMessage": "Maak je geen zorgen! Ik heb genoteerd dat je wilt worden geïnformeerd op {{email}} wanneer {{productName}} weer op voorraad is.",
   "notifyTitle": "Gefeliciteerd! Je wordt geïnformeerd!",
+  "notifySubmitting": "Opslaan…",
+  "notifySubmitError": "We konden je verzoek niet opslaan. Controleer je verbinding en probeer het opnieuw. Blijft het mislukken, dan moet de siteconfiguratie misschien worden bijgewerkt.",
   "validEmail": "Dit is een geldig e-mailadres!",
   "invalidEmail": "Dit is geen geldig e-mailadres!",
   "loading": "Laden...",

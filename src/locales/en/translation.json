@@ -10,6 +10,8 @@
   "moreInfo": "More information",
   "notifyMessage": "Don't worry! I've noted that you want to be notified at {{email}} when {{productName}} is back in stock.",
   "notifyTitle": "Congrats! You will be notified!",
+  "notifySubmitting": "Saving…",
+  "notifySubmitError": "We could not save your request. Check your connection and try again. If it keeps failing, the site configuration may need an update.",
   "validEmail": "This is a valid email!",
   "invalidEmail": "This is not a valid email!",
   "loading": "Loading...",

@@ -10,6 +10,8 @@
   "moreInfo": "Mehr Informationen",
   "notifyMessage": "Keine Sorge! Ich habe notiert, dass Sie an {{email}} benachrichtigt werden möchten, wenn {{productName}} wieder auf Lager ist.",
   "notifyTitle": "Herzlichen Glückwunsch! Sie werden benachrichtigt!",
+  "notifySubmitting": "Wird gespeichert…",
+  "notifySubmitError": "Ihre Anfrage konnte nicht gespeichert werden. Prüfen Sie die Verbindung und versuchen Sie es erneut. Wenn es weiter fehlschlägt, muss die Website-Konfiguration möglicherweise angepasst werden.",
   "validEmail": "Dies ist eine gültige E-Mail!",
   "invalidEmail": "Dies ist keine gültige E-Mail!",
   "loading": "Wird geladen...",

@@ -35,16 +35,9 @@ const HomePage: React.FC = () => {
     };
   }, []);
 
-  const handleNotify = useCallback(
-    async (email: string, productId: string) => {
-      try {
-        await registerEmailContentful(email, productId, currentLanguage);
-      } catch (error) {
-        console.error('Failed to submit notification request', error);
-      }
-    },
-    [currentLanguage]
-  );
+  const handleNotify = useCallback(async (email: string, productId: string) => {
+    await registerEmailContentful(email, productId, currentLanguage);
+  }, [currentLanguage]);
 
   if (loading) {
     return (

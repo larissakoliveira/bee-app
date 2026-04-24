@@ -10,6 +10,8 @@
   "moreInfo": "Mais informações",
   "notifyMessage": "Não se preocupe! Anotei que você deseja ser notificado em {{email}} quando {{productName}} estiver de volta em estoque.",
   "notifyTitle": "Parabéns! Você será notificado!",
+  "notifySubmitting": "Salvando…",
+  "notifySubmitError": "Não foi possível salvar seu pedido. Verifique a conexão e tente de novo. Se continuar falhando, a configuração do site pode precisar de ajuste.",
   "validEmail": "Este é um email válido!",
   "invalidEmail": "Este não é um email válido!",
   "loading": "Carregando...",
