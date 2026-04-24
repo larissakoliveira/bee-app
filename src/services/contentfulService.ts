@@ -15,10 +15,10 @@ const languageFieldId = import.meta.env.VITE_CONTENTFUL_EMAIL_REGISTRATION_LANGU
 const relatedProductFieldId =
   import.meta.env.VITE_CONTENTFUL_EMAIL_REGISTRATION_RELATED_PRODUCT_FIELD_ID?.trim() || 'relatedProduct';
 
-if (import.meta.env.DEV && !import.meta.env.VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID?.trim()) {
+if (!import.meta.env.VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID?.trim()) {
   console.warn(
-    '[Contentful] VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID is not set; using "product". ' +
-      'If you see "Cannot query field productCollection", set it to your Product content type API identifier (Content model → Product).'
+    '[Contentful] VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID is not set; defaulting to "product" → GraphQL field productCollection. ' +
+      'If that field does not exist in your space, set this variable on Vercel (name must include the VITE_ prefix) to the Product content type API identifier from Contentful → Content model → your product type → API identifier, then redeploy.'
   );
 }
 
@@ -56,6 +56,13 @@ export const fetchProducts = async (): Promise<Product[]> => {
     });
   } catch (error) {
     console.error('Error fetching products:', error);
+    const text = error instanceof Error ? error.message : String(error);
+    if (text.includes('Cannot query field') && text.includes('Collection')) {
+      console.error(
+        `[Contentful] No GraphQL collection for content type "${productContentTypeId}". ` +
+          'Set VITE_CONTENTFUL_PRODUCT_CONTENT_TYPE_ID to the exact API identifier of your product content type (not the display name), redeploy, and confirm the delivery token can read that environment.'
+      );
+    }
     return [];
   }
 };
