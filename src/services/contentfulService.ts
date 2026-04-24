@@ -136,7 +136,25 @@ export const registerEmailContentful = async (email: string, productId: string, 
 
   const bodyText = await response.text();
   if (!response.ok) {
-    console.error('[registerEmailContentful] CMA rejected create', response.status, bodyText);
-    throw new Error(`Contentful ${response.status}: ${bodyText.slice(0, 400)}`);
+    let apiMessage = bodyText.slice(0, 400);
+    try {
+      const parsed = JSON.parse(bodyText) as { message?: string };
+      if (parsed.message) apiMessage = parsed.message;
+    } catch {
+      /* keep raw */
+    }
+    console.error('[registerEmailContentful] CMA rejected create', {
+      status: response.status,
+      /** If this still says "emailRegistration" after you set Vercel, production was not rebuilt or the var is not on Production. */
+      contentTypeSent: emailRegistrationContentTypeId,
+      environment: envId,
+      spaceIdPrefix: spaceId ? `${spaceId.slice(0, 8)}…` : '(missing)',
+      message: apiMessage,
+    });
+    const hint =
+      apiMessage.includes('content type') && apiMessage.includes('not be found')
+        ? ` (sent as "${emailRegistrationContentTypeId}" — must match Content model → API identifier; set VITE_CONTENTFUL_EMAIL_REGISTRATION_CONTENT_TYPE_ID on Vercel **Production** for this site, then **Redeploy**.)`
+        : '';
+    throw new Error(`Contentful ${response.status}: ${apiMessage}${hint}`);
   }
 };
