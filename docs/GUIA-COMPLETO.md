@@ -313,4 +313,13 @@ Se não houver inscrições, a resposta JSON indica fila 0 — comportamento nor
 
 ---
 
+## 14. Staging e produção na Vercel
+
+Para **dois URLs** (staging + produção), environment Contentful `staging` vs `master`, e checklist de variáveis na Vercel, vê:
+
+**[VERCEL-STAGING-E-PRODUCAO.md](./VERCEL-STAGING-E-PRODUCAO.md)**  
+**[VERCEL-PASSO-A-PASSO-PAINEL.md](./VERCEL-PASSO-A-PASSO-PAINEL.md)** — cliques no dashboard (4 projetos, `main`/`develop` + `master`/`staging`).
+
+---
+
 *Última atualização: documentação alinhada ao código dos repositórios bee-app e webhook-api-contentful-bees.*
