@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header logoSrc="/bee.png" companyName="Jeroen's bees" />
+      <Header logoSrc="/bee.png" companyName="Bijzondere zaken" />
       <ErrorBoundary>
         <Suspense
           fallback={
